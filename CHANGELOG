@@ -1,4 +1,5 @@
 2014-02-02 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * removed dead code from class_decl_base.rb
   * release 0.0.3
   * fixed dependencies in oval.gemspec
   * release 0.0.2

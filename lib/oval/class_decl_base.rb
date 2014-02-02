@@ -16,8 +16,6 @@ class Oval::ClassDeclBase < Oval::Base
     @klass = k
   end
 
-  def self.myname; 'ClassDeclBase'; end
-
   def validate_class(klass)
     unless klass.is_a?(Class)
       subject = self.class.name.sub(/^.*::/,'')
