@@ -323,4 +323,6 @@ The API documentation is also available
 
 ##Limitations
 
+- API documentation is currently very poor,
+
 [[Table of Contents](#table-of-contents)]
