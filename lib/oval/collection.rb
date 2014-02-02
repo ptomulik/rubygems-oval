@@ -70,7 +70,6 @@ class Oval::Collection < Oval::Base
 
   attr_reader :class_decl
   attr_reader :item_decl
-  attr_reader :class_validator
   attr_reader :item_validator
 
   protected
@@ -87,19 +86,6 @@ class Oval::Collection < Oval::Base
 
   def bind_item_validator(item_decl)
     @item_validator = select_item_validator[item_decl]
-  end
-
-  def select_class_validator
-    if klass.is_a?(Class) and klass <= Hash
-      Oval::HashClass
-    elsif klass.is_a?(Class) and klass <= Array
-      Oval::ArrayClass
-    else
-      # well, we also may have klass that is not a class, but I'm too lazy to
-      # handle all possible exceptions,
-      raise RuntimeError, "Invalid class #{klass.inspect} assigned to klass. " +
-        "It seems like we have a bug in #{self.class.name}"
-    end
   end
 
   def select_item_validator
