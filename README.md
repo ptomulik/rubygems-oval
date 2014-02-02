@@ -126,11 +126,17 @@ end
 A declaration of options consists entirely of what we call here
 **declarators**. The [ov_options](#ov_options) should be used as a root of
 every declaration (starting symbol in grammar terms). It accepts a Hash of the
-form **{optname => optdecl, ...}** as an argument. The **optname** is an option
-name, and **optdecl** is a declarator restricting the option's value. Each
-option name (key) must be convertible to a `String`. Option value declarators
-are non-terminal declarators (defined later in this section) or terminals (any
-other ruby values). The simple declaration
+form 
+
+```
+{optname1 => optdecl1, optname2 => optdecl2, ... }
+```
+
+as an argument. The **optname#** is an option name, and **optdecl#** is a
+declarator restricting the option's value. Each option name (key) must be
+convertible to a `String`. Option value declarators are non-terminal
+declarators (defined later in this section) or terminals (any other ruby
+values). The simple declaration
 
 ```ruby
 ov_options[ :foo => :bar ]
