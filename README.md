@@ -24,24 +24,42 @@ Validate option hashes when passed to methods.
 
 ##<a id="module-description"></a>Module Description
 
-Using hashes to pass options to methods is a very common ruby practice. With **Oval** method authors may restrict callers to pass only declared options that meet requirements described in a hash declaration.
+Using hashes to pass options to methods is a very common ruby practice. With
+**Oval** method authors may restrict callers to pass only declared options that
+meet requirements described in a hash declaration.
 
-The shape of acceptable hashes is described by a simple grammar. The validation is then carried out by a recursive-descent parser that matches the actual values provided by caller against [declarators](#declarators) that comprise the hash declaration.
+The shape of acceptable hashes is described by a simple grammar. The validation
+is then carried out by a recursive-descent parser that matches the actual
+values provided by caller against [declarators](#declarators) that comprise the
+hash declaration.
 
-A declaration consists of terminal and non-terminal declarators. Non-terminal declarators are created by methods of `Oval` module which have names starting with `ov_` prefix. All other values (such as `:symbol`, `'string'`, `nil`, or `Class`) are terminals. Terminals use `==` operator to match the values provided by caller. Non-teminal use its own logic introducing more elaborate matching criteria (see for example [ov_collection](#ov_collection)).
+A declaration consists of terminal and non-terminal declarators. Non-terminal
+declarators are created by methods of `Oval` module which have names starting
+with `ov_` prefix. All other values (such as `:symbol`, `'string'`, `nil`, or
+`Class`) are terminals. Terminals use `==` operator to match the values
+provided by caller. Non-terminal use its own logic introducing more elaborate
+matching criteria (see for example [ov_collection](#ov_collection)).
 
-**Oval** raises **Oval::DeclError** if the declaration is not well-formed, that is if the description of options shape is erronrneous. This is raised from the point of declaration. Other, more common exception is the **Oval::ValueError** which is raised everytime validation fails. This one is raised from within a method which takes the options as an argument.
+**Oval** raises **Oval::DeclError** if the declaration is not well-formed, that
+is if the description of options shape is erroneous. This is raised from the
+point of declaration. Other, more common exception is the **Oval::ValueError**
+which is raised each time the validation fails. This one is raised from within
+a method which takes the options as an argument.
 
 [[Table of Contents](#table-of-contents)]
 
 ##<a id="usage"></a>Usage
 
-The usage is basically a two-step procedure. The first step is to declare options shape. This would create a validator object. The second step is to validate options within a method using the previously constructed validator. For simple hashes the entire construction may fit to a single line. Let's start with such a simple example.
+The usage is basically a two-step procedure. The first step is to declare
+options shape. This would create a validator object. The second step is to
+validate options within a method using the previously constructed validator.
+For simple hashes the entire construction may fit to a single line. Let's start
+with such a simple example.
 
 ###<a id="example-1-declaring-simple-options"></a>Example 1: Declaring Simple Options
 
 The method `foo` in the following code accepts only `{}` and `{:foo => value}`
-as `options`, where `value` is arbitrary:
+as `ops`, where `value` is arbitrary:
 
 ```ruby
 # Options validator
@@ -62,14 +80,26 @@ C.foo :foo => 10 # should pass
 C.foo :foo => 10, :bar => 20 # Oval::ValueError "Invalid option :bar for ops. Allowed options are :foo"
 ```
 
-Options are declared with [ov_xxx declarators](#declarators). The [ov_options](#ov_options) method should always be at the top level. Then all the allowed options should be listed inside of `[]` square brackets. Keys may be any values convertible to strings (i.e. a key given in declaration must `respond_to? :to_s`). Values are declared recursivelly using [ov_xxx declarators](#declarators) or terminal declarators (any other ruby values).
+Options are declared with [ov_xxx declarators](#declarators). The
+[ov_options](#ov_options) method should always be at the top level. Then all
+the allowed options should be listed inside of `[]` square brackets. Keys may
+be any values convertible to strings (i.e. a key given in declaration must
+`respond_to? :to_s`). Values are declared recursively using [ov_xxx
+declarators](#declarators) or terminal declarators (any other ruby values).
 
-In [Example 1](#example-1-declaring-simple-options) we have declared options inside of a method for simplicity. This isn't an optimal technique. Usually options' declaration remains same for the entire lifetime of an application, so it is unnecessary to recreate the declaration each time function is called. In other words, we should move the declaration outside of the method, convert it to a singleton and only validate options inside of a function. For that purpose, t
-he [Example 1](#example-1-declaring-simple-options) could be modified to the following form
+In [Example 1](#example-1-declaring-simple-options) we have declared options
+inside of a method for simplicity. This isn't an optimal technique. Usually
+options' declaration remains same for the entire lifetime of an application, so
+it is unnecessary to recreate the declaration each time function is called. In
+other words, we should move the declaration outside of the method, convert it
+to a singleton and only validate options inside of a function. For that
+purpose, the [Example 1](#example-1-declaring-simple-options) could be modified
+to the following form
 
 ###<a id="example-2-separating-declaration-from-validation"></a>Example 2: Separating declaration from validation
 
-In this example we separate options declaration from the validation to reduce costs related to options declaration:
+In this example we separate options declaration from the validation to reduce
+costs related to options declaration:
 
 ```ruby
 # Options validator
@@ -93,19 +123,30 @@ end
 
 ###<a id="declarators"></a>Declarators
 
-A declaration of options consists entirely of what we call here **declarators**. The [ov_options](#ov_options) should be used as a root of every declaration (starting symbol in grammar terms). It accepts a Hash of the form **{optname => optdecl, ...}** as an argument. The **optname** is an option name, and **optdecl** is a declarator restricting the options's value. Each option name (key) must be convertible to a `String`. Option value declarators are non-terminal declarators (defined later in this section) or terminals (any other ruby values). The simple declaration
+A declaration of options consists entirely of what we call here
+**declarators**. The [ov_options](#ov_options) should be used as a root of
+every declaration (starting symbol in grammar terms). It accepts a Hash of the
+form **{optname => optdecl, ...}** as an argument. The **optname** is an option
+name, and **optdecl** is a declarator restricting the option's value. Each
+option name (key) must be convertible to a `String`. Option value declarators
+are non-terminal declarators (defined later in this section) or terminals (any
+other ruby values). The simple declaration
 
 ```ruby
 ov_options[ :foo => :bar ]
 ```
 
-uses only terminals inside of **ov_options** and literarly permits only the `{:foo => :bar}` or the empty hash `{}` as options (and nothing else). This is how terminal declarators (`:foo` and `:bar` in this example) work. More freedom may be introduced with non-terminal declarators, for example:
+uses only terminals inside of **ov_options** and literary permits only the
+`{:foo => :bar}` or the empty hash `{}` as options (and nothing else). This is
+how terminal declarators (`:foo` and `:bar` in this example) work. More freedom
+may be introduced with non-terminal declarators, for example:
 
 ```ruby
 ov_options[ :foo => ov_anything ]
 ```
 
-defines an option `:foo` which accepts any value. In what follows, we'll document all the core non-terminal declarators implemented in **Oval**.
+defines an option `:foo` which accepts any value. In what follows, we'll
+document all the core non-terminal declarators implemented in **Oval**.
 
 ####<a id="ov\_anything"></a>ov\_anything
 
@@ -140,13 +181,17 @@ defines an option `:foo` which accepts any value. In what follows, we'll documen
   ov_collection[ class_decl, item_decl ]
   ```
 
-- Validation - permits only collections of type **class_decl** with items matching **item_decl** declaration
+- Validation - permits only collections of type **class_decl** with items
+  matching **item_decl** declaration
 - Allowed values for **class\_decl** are:
   - `Hash` or `Array` or any subclass of `Hash` or `Array`,
-  - `ov_subclass_of[klass]` where **klass** is `Hash` or `Array` or a subclass of any of them.
+  - `ov_subclass_of[klass]` where **klass** is `Hash` or `Array` or a subclass
+    of any of them.
 - Allowed values for **item_decl**:
-  - if **class\_decl** is `Array`-like, then any value is allowed as **item\_decl**,
-  - if **class\_decl** is `Hash`-like, then **item\_decl** should be a one-element Hash in form **{ key\_decl => val\_decl }**.
+  - if **class\_decl** is `Array`-like, then any value is allowed as
+    **item\_decl**,
+  - if **class\_decl** is `Hash`-like, then **item\_decl** should be a
+    one-element Hash in form **{ key\_decl => val\_decl }**.
 - Example
 
   ```ruby
@@ -226,7 +271,8 @@ defines an option `:foo` which accepts any value. In what follows, we'll documen
   ```
   
 - Validation - permits only declared options and their values.
-- Allowed values for `optkey_declN` - anything that is convertible to string (namely, anything that responds to `to_s` method).
+- Allowed values for `optkey_declN` - anything that is convertible to string
+  (namely, anything that responds to `to_s` method).
 - Example:
 
   ```ruby
