@@ -33,7 +33,7 @@ class Oval::Base
   def initialize(*args)
   end
 
-  protected
+  private
 
   def self.for_subject(subject)
     subject ? " for #{subject}" : ""

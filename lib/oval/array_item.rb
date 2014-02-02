@@ -17,7 +17,7 @@ class Oval::ArrayItem < Oval::Base
 
   attr_reader :item_decl
 
-  protected
+  private
 
   def item_decl=(decl)
     @item_decl = decl

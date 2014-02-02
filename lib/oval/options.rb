@@ -16,7 +16,7 @@ class Oval::Options < Oval::Base
 
   attr_reader :decl
 
-  protected
+  private
 
   def decl=(decl)
     self.class.validate_decl(decl)

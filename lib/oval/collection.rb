@@ -72,7 +72,7 @@ class Oval::Collection < Oval::Base
   attr_reader :item_decl
   attr_reader :item_validator
 
-  protected
+  private
 
   def class_decl=(decl)
     self.class.validate_class_decl(decl)

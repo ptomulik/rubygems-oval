@@ -5,13 +5,6 @@ require 'oval/instance_of'
 require 'oval/kind_of'
 
 describe Oval::Collection do
-##  Anything = Oval::Anything
-##  SubclassOf = Oval::SubclassOf
-##  InstanceOf = Oval::InstanceOf
-##  KindOf = Oval::KindOf
-##  OneOf = Oval::OneOf
-##  DeclError = Oval::DeclError
-##  ValueError = Oval::ValueError
   describe 'the class' do
     it { described_class.should respond_to :[] }
     it { described_class.should respond_to :new }
@@ -21,10 +14,7 @@ describe Oval::Collection do
     let(:subject)  { described_class[Array,nil] }
     it { should respond_to :validate }
     it { should respond_to :class_decl }
-    it { should respond_to :class_decl= }
     it { should respond_to :item_decl }
-    it { should respond_to :item_decl= }
-    it { should respond_to :select_item_validator }
   end
 
   describe "[]" do

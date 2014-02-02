@@ -16,9 +16,9 @@ describe Oval::Options do
     before { described_class.stubs(:validate_decl).once.with(:decl0) }
     [
       :validate,
-      :validate_option,
-      :validate_option_name,
-      :validate_option_value,
+#      :validate_option,
+#      :validate_option_name,
+#      :validate_option_value,
     ].each do |method|
       it { should respond_to method }
     end
@@ -151,11 +151,11 @@ describe Oval::Options do
 
   describe "#validate_decl" do
     context "validate_decl({:foo => :F, :bar => 4})" do
-      it { expect { described_class.validate_decl({:foo => :F, :bar => 4}) }.to_not raise_error }
+      it { expect { described_class.send(:validate_decl,{:foo => :F, :bar => 4}) }.to_not raise_error }
     end
     context "validate_decl(:decl1)" do
       let(:msg) { "Invalid declaration :decl1 of type Symbol. Should be a Hash" }
-      it { expect { described_class.validate_decl(:decl1) }.to raise_error Oval::DeclError, msg }
+      it { expect { described_class.send(:validate_decl,:decl1) }.to raise_error Oval::DeclError, msg }
     end
     [
       {},
@@ -167,7 +167,7 @@ describe Oval::Options do
         let(:decl) { decl }
         before { decl.keys.each {|key| described_class.expects(:validate_option_name_decl).once.with(key) } }
         it "calls validate_option_name_decl(key) once for each key from #{decl.inspect} " do
-          expect { described_class.validate_decl(decl) }.to_not raise_error
+          expect { described_class.send(:validate_decl,decl) }.to_not raise_error
         end
       end
     end
@@ -177,7 +177,7 @@ describe Oval::Options do
     [ :one, 'two', 3 ].each do |decl|
       context "validate_option_name_decl(#{decl.inspect})" do
         let(:decl) { decl }
-        it { expect { described_class.validate_option_name_decl(decl) }.to_not raise_error }
+        it { expect { described_class.send(:validate_option_name_decl,decl) }.to_not raise_error }
       end
     end
   end

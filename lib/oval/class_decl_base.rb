@@ -9,7 +9,8 @@ class Oval::ClassDeclBase < Oval::Base
     self.klass = klass
   end
 
-  protected
+  private
+
   def klass=(k)
     validate_class(k)
     @klass = k

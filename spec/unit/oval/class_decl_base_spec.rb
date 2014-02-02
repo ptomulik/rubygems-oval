@@ -15,9 +15,7 @@ describe Oval::ClassDeclBase do
     before { described_class.any_instance.stubs(:validate_class) }
     it { should be_kind_of Oval::Base }
     [
-      :validate_class,
       :klass,
-      :klass=,
     ].each do |method|
       it { should respond_to method }
     end

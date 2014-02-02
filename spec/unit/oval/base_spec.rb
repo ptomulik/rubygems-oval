@@ -18,8 +18,6 @@ describe Oval::Base do
     let(:subject) { described_class[:shape0] }
     [
       :validate,
-      :for_subject,
-      :enumerate,
     ].each do |method|
       it { should respond_to method }
     end
