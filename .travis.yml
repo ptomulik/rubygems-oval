@@ -8,15 +8,5 @@ script: "bundle exec rake spec SPEC_OPTS='--format documentation'"
 branches:
   only:
     master
-env:
-  matrix:
-    - FACTER_GEM_VERSION="~> 1.3.0"
-    - FACTER_GEM_VERSION="~> 1.5.0"
-    - FACTER_GEM_VERSION="~> 1.6.0"
-    - FACTER_GEM_VERSION="~> 1.7.0"
-#matrix:
-#  exclude:
-#    - rvm: 2.0.0
-#      env: FACTER_GEM_VERSION="~> 2.7.0"
 notifications:
   email: false
