@@ -16,4 +16,13 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_development_dependency "rake"
+  gem.add_development_dependency 'rspec-core'
+  gem.add_development_dependency 'rspec-expectations'
+  gem.add_development_dependency 'mocha'
+  if RUBY_VERSION >= "1.9"
+    gem.add_development_dependency 'coveralls'
+    gem.add_development_dependency 'yard'
+    gem.add_development_dependency 'redcarpet'
+    gem.add_development_dependency 'github-markup'
+  end
 end
