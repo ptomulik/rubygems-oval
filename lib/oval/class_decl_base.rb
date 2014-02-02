@@ -1,6 +1,5 @@
 require 'oval/base'
 class Oval::ClassDeclBase < Oval::Base
-  attr_reader :klass
   def self.[](klass)
     new(klass)
   end
@@ -9,16 +8,18 @@ class Oval::ClassDeclBase < Oval::Base
     self.klass = klass
   end
 
+  attr_reader :klass
+
   private
 
-  def klass=(k)
-    validate_class(k)
-    @klass = k
+  def klass=(klass)
+    self.class.validate_class(klass, self.class)
+    @klass = klass
   end
 
-  def validate_class(klass)
+  def self.validate_class(klass,receiver)
     unless klass.is_a?(Class)
-      subject = self.class.name.sub(/^.*::/,'')
+      subject = receiver.name.sub(/^.*::/,'')
       raise Oval::DeclError,
         "Invalid class #{klass.inspect}#{for_subject(subject)}"
     end

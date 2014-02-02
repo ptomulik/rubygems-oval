@@ -12,7 +12,7 @@ describe Oval::ClassDeclBase do
 
   context "an instance" do
     let(:subject) { described_class[:klass0] }
-    before { described_class.any_instance.stubs(:validate_class) }
+    before { described_class.stubs(:validate_class) }
     it { should be_kind_of Oval::Base }
     [
       :klass,
@@ -22,26 +22,26 @@ describe Oval::ClassDeclBase do
   end
 
   describe "#validate_class" do
-    let(:subject) { described_class.new(:klass0) }
-    before do
-      described_class.any_instance.stubs(:validate_class)
-      subject
-      described_class.any_instance.unstub(:validate_class)
-    end
+##    let(:subject) { described_class.new(:klass0) }
+##    before do
+##      described_class.stubs(:validate_class)
+##      subject
+##      described_class.unstub(:validate_class)
+##    end
     context "validate_class(:symbol1)" do
       let(:msg) { "Invalid class :symbol1 for ClassDeclBase" }
-      it { expect { subject.send(:validate_class,:symbol1) }.to raise_error Oval::DeclError, msg }
+      it { expect { described_class.send(:validate_class,:symbol1,Oval::ClassDeclBase) }.to raise_error Oval::DeclError, msg }
     end
     [ Array, String, NilClass ].each do |klass|
       context "validate_class(#{klass.name})" do
         let(:klass) { klass }
-        it { expect { subject.send(:validate_class,klass) }.to_not raise_error }
+        it { expect { described_class.send(:validate_class,klass,Oval::ClassDeclBase) }.to_not raise_error }
       end
     end
   end
 
   describe "klass" do
-    before { described_class.any_instance.stubs(:validate_class) }
+    before { described_class.stubs(:validate_class) }
     context "new(:klass0).klass" do
       it { described_class.new(:klass0).klass.should be :klass0 }
     end
@@ -53,13 +53,13 @@ describe Oval::ClassDeclBase do
   end
 
   describe "#klass=" do
-    before { described_class.any_instance.stubs(:validate_class) }
+    before { described_class.stubs(:validate_class) }
     let(:subject) { described_class.new(:klass0) }
     context "#klass = :klass1" do
-      it "should call self.class.validate_class(:klass1) once" do
+      it "should call self.class.validate_class(:klass1,Oval::ClassDeclBase) once" do
         subject # reference before re-stubbing validate_class
-        subject.stubs(:validate_class).never
-        subject.stubs(:validate_class).once.with(:klass1)
+        described_class.stubs(:validate_class).never
+        described_class.stubs(:validate_class).once.with(:klass1,Oval::ClassDeclBase)
         expect { subject.send(:klass=,:klass1) }.to_not raise_error
       end
       it "should assign @klass = :klass1" do

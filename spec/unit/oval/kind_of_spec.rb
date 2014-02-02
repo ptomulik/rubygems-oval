@@ -4,7 +4,7 @@ require 'oval/kind_of'
 describe Oval::KindOf do
   describe 'an instance' do
     let(:subject)  { described_class[:klass] }
-    before { described_class.any_instance.stubs(:validate_class) }
+    before { described_class.stubs(:validate_class) }
     it { should respond_to :validate }
   end
 
