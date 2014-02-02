@@ -1,4 +1,5 @@
 2014-02-02 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * fixed Modulefile
   * release 0.0.1
   * added note to README.md
   * corrected typos in README.md
