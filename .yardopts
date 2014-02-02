@@ -1,0 +1,4 @@
+--title 'Options Validator'
+--markup-provider=redcarpet
+--markup=markdown
+lib/**/*.rb

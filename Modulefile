@@ -1,0 +1,8 @@
+name    'ptomulik-options_validator'
+version '0.0.1'
+source 'git://github.com/ptomulik/puppet-options_validator.git'
+author 'ptomulik'
+license 'Apache License, Version 2.0'
+summary 'Simple utility to validate Hashes of options.'
+description 'Simple utility to validate Hashes of options.'
+project_page 'https://gitbub.com/ptomulik/puppet-options_validator'
