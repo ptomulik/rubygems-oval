@@ -1,7 +1,7 @@
 #Oval - Options Validator
 
 [![Build Status](https://travis-ci.org/ptomulik/rubygems-oval.png?branch=master)](https://travis-ci.org/ptomulik/rubygems-oval)
-[![Coverage Status](https://coveralls.io/options_validator/ptomulik/rubygems-oval/badge.png)](https://coveralls.io/r/ptomulik/rubygems-oval)
+[![Coverage Status](https://coveralls.io/repos/ptomulik/rubygems-oval/badge.png?branch=master)](https://coveralls.io/r/ptomulik/rubygems-oval?branch=master)
 [![Code Climate](https://codeclimate.com/github/ptomulik/rubygems-oval.png)](https://codeclimate.com/github/ptomulik/rubygems-oval)
 
 ####<a id="table-of-contents"></a>Table of Contents
