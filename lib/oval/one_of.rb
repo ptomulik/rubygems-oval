@@ -12,7 +12,7 @@ class Oval::OneOf < Oval::Base
     ok = false
     self.decls.each do |decl|
       begin
-        self.class.ensure_match(thing, decl)
+        self.class.validate(thing, decl)
         ok = true
         break
       rescue Oval::ValueError
@@ -30,7 +30,7 @@ class Oval::OneOf < Oval::Base
       "be absent"
     else
       output = decls[0..-2].map{|k| self.class.it_should(k)}.join(', ')
-      output.empty? ? self.class.it_should(decls[0]) : 
+      output.empty? ? self.class.it_should(decls[0]) :
                       [output, self.class.it_should(decls[-1])].join(' or ')
     end
   end

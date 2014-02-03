@@ -23,6 +23,21 @@ describe Oval do
   its(:ov_one_of) { should be Oval::OneOf }
   its(:ov_options) { should be Oval::Options }
   its(:ov_subclass_of) { should be Oval::SubclassOf }
+
+  describe "validate" do
+    context "#{described_class.name}.validate(:foo,:bar)" do
+      it "should invoke Oval::Base.validate(:foo,:bar,nil) once" do
+        Oval::Base.expects(:validate).once.with(:foo,:bar,nil)
+        expect { described_class.validate(:foo,:bar) }.to_not raise_error
+      end
+    end
+    context "#{described_class.name}.validate(:foo,:bar,'subj')" do
+      it "should invoke Oval::Base.validate(:foo,:bar,'subj') once" do
+        Oval::Base.expects(:validate).once.with(:foo,:bar,'subj')
+        expect { described_class.validate(:foo,:bar,'subj') }.to_not raise_error
+      end
+    end
+  end
 end
 
 # examples from README.md and other sources

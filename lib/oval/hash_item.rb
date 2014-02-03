@@ -6,8 +6,8 @@ class Oval::HashItem < Oval::Base
   def validate(item, i, subject = nil)
     key_subject = subject.nil? ? nil: "#{subject} key"
     val_subject = subject.nil? ? nil: "#{subject}[#{item[0].inspect}]"
-    self.class.ensure_match(item[0],key_decl,key_subject)
-    self.class.ensure_match(item[1],val_decl,val_subject)
+    self.class.validate(item[0],key_decl,key_subject)
+    self.class.validate(item[1],val_decl,val_subject)
   end
 
   def it_should

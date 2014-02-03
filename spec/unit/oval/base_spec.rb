@@ -5,7 +5,7 @@ describe Oval::Base do
   context "the class" do
     [
       :ensure_equal,
-      :ensure_match,
+      :validate,
       :[],
       :for_subject,
       :enumerate,
@@ -23,31 +23,31 @@ describe Oval::Base do
     end
   end
 
-  describe "ensure_match" do
-    context "ensure_match(:foo,:bar)" do
+  describe "validate" do
+    context "validate(:foo,:bar)" do
       it "should invoke ensure_equal(:foo,:bar,nil) once" do
         described_class.expects(:ensure_equal).once.with(:foo,:bar,nil)
-        expect { described_class.ensure_match(:foo,:bar) }.to_not raise_error
+        expect { described_class.validate(:foo,:bar) }.to_not raise_error
       end
     end
-    context "ensure_match(:foo,:bar,'subj1')" do
+    context "validate(:foo,:bar,'subj1')" do
       it "should invoke ensure_equal(:foo,:bar,'subj1') once" do
         described_class.expects(:ensure_equal).once.with(:foo,:bar,'subj1')
-        expect { described_class.ensure_match(:foo,:bar,'subj1') }.to_not raise_error
+        expect { described_class.validate(:foo,:bar,'subj1') }.to_not raise_error
       end
     end
-    context "ensure_match(:foo,shape)" do
+    context "validate(:foo,shape)" do
       let(:shape) { described_class[:shape0] }
       it "should invoke shape.validate(:foo,nil) once" do
         shape.expects(:validate).once.with(:foo,nil)
-        expect { described_class.ensure_match(:foo,shape) }.to_not raise_error
+        expect { described_class.validate(:foo,shape) }.to_not raise_error
       end
     end
-    context "ensure_match(:foo,shape,'subj1')" do
+    context "validate(:foo,shape,'subj1')" do
       let(:shape) { described_class[:shape0] }
       it "should invoke shape.validate(:foo,'subj1') once" do
         shape.expects(:validate).once.with(:foo,'subj1')
-        expect { described_class.ensure_match(:foo,shape,'subj1') }.to_not raise_error
+        expect { described_class.validate(:foo,shape,'subj1') }.to_not raise_error
       end
     end
   end

@@ -4,7 +4,7 @@ class Oval::ArrayItem < Oval::Base
 
   def validate(item, i, subject = nil)
     item_subject = subject.nil? ? nil : "#{subject}[#{i}]"
-    self.class.ensure_match(item,item_decl,item_subject)
+    self.class.validate(item,item_decl,item_subject)
   end
 
   def it_should

@@ -1,4 +1,5 @@
 2014-02-03 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * refactored ensure_match -> validate
   * added Oval::Match declarator
   * fixed error message in OneOf to be more verbose
   * added it_should method to declarators

@@ -39,7 +39,7 @@ class Oval::Options < Oval::Base
 
   def validate_option_value(value, name, subject = nil)
     subject = "#{subject}[#{name.inspect}]" if subject
-    self.class.ensure_match(value, decl[name], subject)
+    self.class.validate(value, decl[name], subject)
   end
 
   def self.validate_decl(decl)

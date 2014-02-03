@@ -144,8 +144,8 @@ describe Oval::Options do
         let(:subject) { described_class[decl] }
         context "validate_option_value(#{args.map{|x| x.inspect}.join(', ')})" do
           let(:name) { name }
-          it "should invoke self.class.ensure_match(#{args2.map{|x| x.inspect}.join(', ')}) once" do
-            described_class.stubs(:ensure_match).once.with(*args2)
+          it "should invoke self.class.validate(#{args2.map{|x| x.inspect}.join(', ')}) once" do
+            described_class.stubs(:validate).once.with(*args2)
             expect { subject.send(:validate_option_value,*args) }.to_not raise_error
           end
         end

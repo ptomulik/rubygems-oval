@@ -50,14 +50,14 @@ describe Oval::ArrayItem do
   describe "#validate" do
     let(:subject) { described_class[:item_decl0] }
     context "validate(:item1,0)" do
-      it 'should invoke self.class.ensure_match(:item1,:item_decl0,nil) once' do
-        described_class.expects(:ensure_match).once.with(:item1,:item_decl0,nil)
+      it 'should invoke self.class.validate(:item1,:item_decl0,nil) once' do
+        described_class.expects(:validate).once.with(:item1,:item_decl0,nil)
         subject.validate(:item1,0)
       end
     end
     context "validate(:item1,0,'foo')" do
-      it 'should invoke self.class.ensure_match(:item1,:item_decl0,"foo[0]") once' do
-        described_class.expects(:ensure_match).once.with(:item1,:item_decl0,"foo[0]")
+      it 'should invoke self.class.validate(:item1,:item_decl0,"foo[0]") once' do
+        described_class.expects(:validate).once.with(:item1,:item_decl0,"foo[0]")
         subject.validate(:item1,0,'foo')
       end
     end

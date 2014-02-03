@@ -13,7 +13,7 @@ class Oval::Base
     end
   end
 
-  def self.ensure_match(thing, decl, subject = nil)
+  def self.validate(thing, decl, subject = nil)
     if decl.is_a? Oval::Base
       decl.validate(thing,subject)
     else

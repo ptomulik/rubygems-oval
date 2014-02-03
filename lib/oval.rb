@@ -17,4 +17,9 @@ module Oval
   def ov_one_of; Oval::OneOf; end
   def ov_options; Oval::Options; end
   def ov_subclass_of; Oval::SubclassOf; end
+
+  module_function
+  def validate(thing, decl, subject = nil)
+    Oval::Base.validate(thing, decl, subject)
+  end
 end
