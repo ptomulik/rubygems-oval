@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = 'oval'
-  gem.version       = '0.0.3'
+  gem.version       = '0.0.4'
   gem.authors       = ["Pawel Tomulik"]
   gem.email         = ["ptomulik@meil.pw.edu.pl"]
   gem.description   = %q{Validate options when passed to methods}
