@@ -38,7 +38,7 @@ declarators are created by methods of `Oval` module which have names starting
 with `ov_` prefix. All other values (such as `:symbol`, `'string'`, `nil`, or
 `Class`) are terminals. Terminals use `==` operator to match the values
 provided by caller. Non-terminal use its own logic introducing more elaborate
-matching criteria (see for example [ov_collection](#ov_collection)).
+matching criteria (see for example [ov\_collection](#ov_collection)).
 
 **Oval** raises **Oval::DeclError** if the declaration is not well-formed, that
 is if the description of options shape is erroneous. This is raised from the
@@ -154,6 +154,17 @@ ov_options[ :foo => ov_anything ]
 defines an option `:foo` which accepts any value. In what follows, we'll
 document all the core non-terminal declarators implemented in **Oval**.
 
+###<a id="index-of-declarators"></a>Index of Declarators
+
+- [ov\_anything](#ov_anything)
+- [ov\_collection](#ov_collection)
+- [ov\_instance\_of](#ov_instance_of)
+- [ov\_kind\_of](#ov_kind_of)
+- [ov\_match](#ov_match)
+- [ov\_one\_of](#ov_one_of)
+- [ov\_options](#ov_options)
+- [ov\_subclass_of](#ov_subclass_of)
+
 ####<a id="ov\_anything"></a>ov\_anything
 
 - Declaration
@@ -177,6 +188,8 @@ document all the core non-terminal declarators implemented in **Oval**.
     ov.validate(ops, 'ops')
   end
   ```
+
+[[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
 
 
 ####<a id="ov\_collection"></a>ov\_collection
@@ -210,6 +223,8 @@ document all the core non-terminal declarators implemented in **Oval**.
   end
   ```
 
+[[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
+
 ####<a id="ov\_instance\_of"></a>ov\_instance\_of
 
 - Declaration
@@ -228,6 +243,8 @@ document all the core non-terminal declarators implemented in **Oval**.
     ov.validate(ops,'ops')
   end
   ```
+
+[[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
 
 ####<a id="ov\_kind\_of"></a>ov\_kind\_of                                       
 
@@ -248,6 +265,8 @@ document all the core non-terminal declarators implemented in **Oval**.
   end
   ```
   
+[[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
+
 ####<a id="ov\_match"></a>ov\_match                                       
 
 - Declaration
@@ -268,6 +287,8 @@ document all the core non-terminal declarators implemented in **Oval**.
   end
   ```
   
+[[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
+
 ####<a id="ov\_one\_of"></a>ov\_one\_of   
 
 - Declaration
@@ -288,6 +309,8 @@ document all the core non-terminal declarators implemented in **Oval**.
   end
   ```
   
+[[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
+
 ####<a id="ov\_options"></a>ov\_options       
 
 - Declaration
@@ -312,6 +335,8 @@ document all the core non-terminal declarators implemented in **Oval**.
   end 
   ```
   
+[[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
+
 ####<a id="ov\_subclass\_of"></a>ov\_subclass\_of                               
 
 - Declaration
