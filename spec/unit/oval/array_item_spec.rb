@@ -1,5 +1,5 @@
-require 'spec_helper.rb'
-require 'oval/array_item.rb'
+require 'spec_helper'
+require 'oval/array_item'
 
 describe Oval::ArrayItem do
   it "should be subclass of Oval::Base" do

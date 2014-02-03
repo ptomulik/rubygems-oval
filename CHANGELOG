@@ -1,4 +1,5 @@
 2014-02-03 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * added Oval::Match declarator
   * fixed error message in OneOf to be more verbose
   * added it_should method to declarators
   * release 0.0.4

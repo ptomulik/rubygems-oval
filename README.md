@@ -248,6 +248,26 @@ document all the core non-terminal declarators implemented in **Oval**.
   end
   ```
   
+####<a id="ov\_match"></a>ov\_match                                       
+
+- Declaration
+
+  ```ruby
+  ov_match[re]
+  ```
+  
+- Validation - permits only values matching regular expression **re**,
+- Allowed values for **re** - must be a kind of `Regexp`.
+- Example
+
+  ```ruby
+  # Only valid identifiers are allowed as :bar option
+  ov = ov_options[ :bar => ov_match[/^[a-z_]\w+$/] ]
+  def foo(ops = {})
+    ov.validate(ops,'ops')
+  end
+  ```
+  
 ####<a id="ov\_one\_of"></a>ov\_one\_of   
 
 - Declaration

@@ -9,6 +9,7 @@ describe Oval do
     it { should respond_to :ov_collection }
     it { should respond_to :ov_instance_of }
     it { should respond_to :ov_kind_of }
+    it { should respond_to :ov_match }
     it { should respond_to :ov_one_of }
     it { should respond_to :ov_options }
     it { should respond_to :ov_subclass_of }
@@ -18,6 +19,7 @@ describe Oval do
   its(:ov_collection) { should be Oval::Collection }
   its(:ov_instance_of) { should be Oval::InstanceOf }
   its(:ov_kind_of) { should be Oval::KindOf }
+  its(:ov_match) { should be Oval::Match }
   its(:ov_one_of) { should be Oval::OneOf }
   its(:ov_options) { should be Oval::Options }
   its(:ov_subclass_of) { should be Oval::SubclassOf }
