@@ -53,9 +53,9 @@ describe Oval::OneOf do
       end
     end
     [
-      [ [:foo ], [:bar], "Invalid value :bar" ],
-      [ [:foo, :bar], [:geez], "Invalid value :geez" ],
-      [ [:foo, :bar], [:geez,'subj'], "Invalid value :geez for subj" ],
+      [ [:foo ], [:bar], "Invalid value :bar. Should be equal :foo" ],
+      [ [:foo, :bar], [:geez], "Invalid value :geez. Should be equal :foo or be equal :bar" ],
+      [ [:foo, :bar], [:geez,'subj'], "Invalid value :geez for subj. Should be equal :foo or be equal :bar" ],
     ].each do |decls,args,msg|
       context "#{described_class}[#{decls.map{|x| x.inspect}.join(', ')}].validate(#{args.map{|x| x.inspect}.join(', ')})" do
         let(:args) { args }

@@ -19,7 +19,9 @@ class Oval::OneOf < Oval::Base
       end
     end
     unless ok
-      raise Oval::ValueError, "Invalid value #{thing.inspect}#{for_subject(subject)}"
+      raise Oval::ValueError,
+        "Invalid value #{thing.inspect}#{for_subject(subject)}. " +
+        "Should #{self.it_should}"
     end
   end
 
