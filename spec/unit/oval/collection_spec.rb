@@ -5,16 +5,22 @@ require 'oval/instance_of'
 require 'oval/kind_of'
 
 describe Oval::Collection do
+  it "should be subclass of Oval::Base" do
+    described_class.should < Oval::Base
+  end
+
   describe 'the class' do
     it { described_class.should respond_to :[] }
     it { described_class.should respond_to :new }
     it { described_class.should respond_to :validate_class_decl }
   end
+
   describe 'an instance' do
     let(:subject)  { described_class[Array,nil] }
     it { should respond_to :validate }
     it { should respond_to :class_decl }
     it { should respond_to :item_decl }
+    it { should respond_to :it_should }
   end
 
   describe "[]" do
@@ -73,33 +79,6 @@ describe Oval::Collection do
       end
     end
   end
-
-##  describe "validate_item_decl" do
-##    [
-##      [Hash, "Hash"],
-##      [Class.new(Hash), "Class.new(Hash)" ],
-##    ].each do |class_decl,class_desc|
-##      context "validate_item_decl(:decl1, #{class_desc})" do
-##        let(:class_decl) { class_decl }
-##        it "should invoke validate_hash_item_decl(:decl1) once" do
-##          described_class.stubs(:validate_hash_item_decl).once.with(:decl1)
-##          expect { described_class.validate_item_decl(:decl1,class_decl) }.to_not raise_error
-##        end
-##      end
-##    end
-##    [
-##      [Array, "Array"],
-##      [Class.new(Array), "Class.new(Array)" ],
-##    ].each do |class_decl,class_desc|
-##      context "validate_item_decl(:decl1, #{class_desc})" do
-##        let(:class_decl) { class_decl }
-##        it "should not invoke validate_hash_item_decl(:decl1)" do
-##          described_class.stubs(:validate_hash_item_decl).never
-##          expect { described_class.validate_item_decl(:decl1,class_decl) }.to_not raise_error
-##        end
-##      end
-##    end
-##  end
 
   describe "#class_decl" do
     before do
@@ -251,6 +230,27 @@ describe Oval::Collection do
         let(:collection) { collection }
         let(:msg) { msg }
         it { expect { subject.validate(collection,'collection') }.to raise_error Oval::ValueError, msg}
+      end
+    end
+  end
+
+  describe "#it_should" do
+    [
+      [ [Array,Oval::Anything],
+        "be Array whose item should be anything" ],
+      [ [Array,nil],
+        "be Array whose item should be equal nil"],
+      [ [Array, Oval::InstanceOf[Fixnum]],
+        "be Array whose item should be an instance of Fixnum"],
+      [ [Hash, {:foo => :bar}],
+        "be Hash whose item should be {key => value} where key should be equal :foo and value should be equal :bar"],
+      [ [Hash, {Oval::InstanceOf[Symbol] => Oval::KindOf[Numeric]}],
+        "be Hash whose item should be {key => value} where key should be an instance of Symbol and value should be a kind of Numeric"],
+    ].each do |decls,msg|
+      context "#{described_class.name}[#{decls.map{|x| x.inspect}.join(', ')}].it_should" do
+        let(:decls) { decls }
+        let(:msg) { msg }
+        it { described_class[*decls].it_should.should == msg}
       end
     end
   end

@@ -2,6 +2,10 @@ require 'spec_helper'
 require 'oval/options'
 
 describe Oval::Options do
+  it "should be subclass of Oval::Base" do
+    described_class.should < Oval::Base
+  end
+
   context "the class" do
     [
       :validate_decl,

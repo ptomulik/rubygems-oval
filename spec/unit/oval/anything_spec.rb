@@ -2,26 +2,36 @@ require 'spec_helper'
 require 'oval/anything'
 describe Oval::Anything do
   let(:subject) { described_class.instance }
+
+  it "should be subclass of Oval::Base" do
+    described_class.should < Oval::Base
+  end
+
   context 'the class' do
     it { described_class.should respond_to :instance }
     it { described_class.should respond_to :[] }
     it { described_class.should_not respond_to :new }
   end
+
   context 'an instance' do
     it { should respond_to :validate }
+    it { should respond_to :it_should }
   end
+
   describe "instance (i.e. class method called instance)" do
     it "should return singleton" do
       previous = described_class.instance
       described_class.instance.should be previous
     end
   end
+
   describe "[]" do
     it "should == #{described_class}.instance" do
       described_class.stubs(:instance).once.with().returns :ok
       described_class[].should be :ok
     end
   end
+
   describe "#validate" do
     # It should accept anything, which is quite hard to test, so I put here
     # some random stuff ...
@@ -34,5 +44,9 @@ describe Oval::Anything do
         it { expect { subject.validate(x) }.to_not raise_error }
       end
     end
+  end
+
+  describe "#it_should" do
+    its(:it_should) { should == "be anything" }
   end
 end

@@ -7,6 +7,10 @@ class Oval::ArrayItem < Oval::Base
     self.class.ensure_match(item,item_decl,item_subject)
   end
 
+  def it_should
+    self.class.it_should(item_decl)
+  end
+
   def self.[](item_decl)
     new(item_decl)
   end

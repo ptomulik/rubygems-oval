@@ -6,6 +6,7 @@ describe Oval::SubclassOf do
   it "should be subclass of Oval::ClassDeclBase" do
     described_class.should < Oval::ClassDeclBase
   end
+
   describe "#validate" do
     [
       [Integer,[Fixnum]],
@@ -28,6 +29,15 @@ describe Oval::SubclassOf do
         let(:msg) { msg }
         let(:subject) { described_class[klass] }
         it { expect { subject.validate(*args) }.to raise_error Oval::ValueError, msg}
+      end
+    end
+  end
+
+  describe "#it_should" do
+    [ String, NilClass, Numeric ].each do |klass|
+      context "#{described_class.name}[#{klass.name}].it_should" do
+        let(:klass) { klass }
+        it { described_class[klass].it_should.should == "be a subclass of #{klass.name}"}
       end
     end
   end

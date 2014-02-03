@@ -22,11 +22,26 @@ class Oval::Base
     end
   end
 
+  def self.it_should(decl)
+    if decl.is_a? Oval::Base
+      decl.it_should
+    elsif decl == Oval::Anything
+      Oval::Anything[].it_should
+    else
+      # "terminal symbol"
+      "be equal #{decl.inspect}"
+    end
+  end
+
   def self.[](*args)#,subject = default_subject)
     return new(*args)
   end
 
   def validate(value, subject = nil)
+    raise NotImplementedError, "This method should be overwritten by a subclass"
+  end
+
+  def it_should()
     raise NotImplementedError, "This method should be overwritten by a subclass"
   end
 

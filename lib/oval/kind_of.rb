@@ -8,4 +8,7 @@ class Oval::KindOf < Oval::ClassDeclBase
         "#{for_subject(subject)}. Should be a kind of #{klass.name}"
     end
   end
+  def it_should
+    "be a kind of #{klass.name}"
+  end
 end

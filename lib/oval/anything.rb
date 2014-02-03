@@ -8,5 +8,6 @@ class Oval::Anything < Oval::Base
     private :new
   end
   def validate(x,subject=nil); end
+  def it_should; "be anything"; end
   def initialize(); end
 end

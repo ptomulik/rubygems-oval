@@ -8,4 +8,7 @@ class Oval::SubclassOf < Oval::ClassDeclBase
         "Should be subclass of #{klass.name}"
     end
   end
+  def it_should
+    "be a subclass of #{klass.name}"
+  end
 end

@@ -4,16 +4,22 @@ require 'oval/instance_of'
 require 'oval/kind_of'
 
 describe Oval::HashItem do
+  it "should be subclass of Oval::Base" do
+    described_class.should < Oval::Base
+  end
+
   context 'the class' do
     it { described_class.should respond_to :[] }
     it { described_class.should respond_to :validate_item_decl }
   end
+
   context 'an instance' do
     let(:subject) { described_class[{:key_decl0 => :val_decl0}] }
     it { should respond_to :validate }
     it { should respond_to :key_decl }
     it { should respond_to :val_decl }
     it { subject.private_methods.map{|m| m.is_a?(Symbol) ? m : m.intern}.should include :item_decl= }
+    it { should respond_to :it_should }
   end
 
   describe "[]" do
@@ -140,6 +146,41 @@ describe Oval::HashItem do
         let(:args) { args }
         let(:msg) { msg }
         it { expect { subject.validate(*args) }.to raise_error Oval::ValueError, msg }
+      end
+    end
+  end
+
+  describe "#it_should" do
+    [
+      [{:foo => :bar}, 'be equal :foo', 'be equal :bar' ],
+      [{'x'  => 10}, 'be equal "x"', 'be equal 10' ],
+      [
+        {
+          Class.new(Oval::Base) do
+            def it_should
+              'be the test1 value'
+            end
+            def inspect
+              'Oval::Test1'
+            end
+          end.new =>
+          Class.new(Oval::Base) do
+            def it_should
+              'be the test2 value'
+            end
+            def inspect
+              'Oval::Test2'
+            end
+          end.new
+        },
+        'be the test1 value',
+        'be the test2 value',
+      ]
+    ].each do |item_decl,key_should, val_should|
+      context "#{described_class}[#{item_decl.inspect}].it_should" do
+        let(:item_decl) { item_decl }
+        let(:msg) { "be {key => value} where key should #{key_should} and value should #{val_should}" }
+        it { described_class[item_decl].it_should.should == msg }
       end
     end
   end

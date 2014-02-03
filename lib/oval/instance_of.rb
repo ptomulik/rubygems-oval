@@ -8,4 +8,7 @@ class Oval::InstanceOf < Oval::ClassDeclBase
         "#{for_subject(subject)}. Should be an instance of #{klass.name}"
     end
   end
+  def it_should
+    "be an instance of #{klass.name}"
+  end
 end

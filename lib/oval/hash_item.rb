@@ -10,6 +10,11 @@ class Oval::HashItem < Oval::Base
     self.class.ensure_match(item[1],val_decl,val_subject)
   end
 
+  def it_should
+    "be {key => value} where key should #{self.class.it_should(key_decl)} " +
+    "and value should #{self.class.it_should(val_decl)}"
+  end
+
   def self.[](item_decl)
     new(item_decl)
   end

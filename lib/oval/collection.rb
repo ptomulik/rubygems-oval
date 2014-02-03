@@ -43,12 +43,15 @@ require 'oval/hash_item'
 # ```
 #
 class Oval::Collection < Oval::Base
-
   def validate(collection, subject = nil)
     class_subject = subject.nil? ? nil : "#{subject}.class"
     self.class.ensure_match(collection.class, class_decl, class_subject)
     i = 0
     collection.each { |item| item_validator.validate(item, i, subject); i+= 1}
+  end
+
+  def it_should
+    "be #{klass} whose item should #{self.class.it_should(item_validator)}"
   end
 
   def self.[](class_decl,item_decl = Oval::Anything[])

@@ -2,6 +2,11 @@ require 'spec_helper'
 require 'oval/class_decl_base'
 
 describe Oval::ClassDeclBase do
+
+  it "should be subclass of Oval::Base" do
+    described_class.should < Oval::Base
+  end
+
   context "the class" do
     [
       :[],
@@ -22,12 +27,6 @@ describe Oval::ClassDeclBase do
   end
 
   describe "#validate_class" do
-##    let(:subject) { described_class.new(:klass0) }
-##    before do
-##      described_class.stubs(:validate_class)
-##      subject
-##      described_class.unstub(:validate_class)
-##    end
     context "validate_class(:symbol1)" do
       let(:msg) { "Invalid class :symbol1 for ClassDeclBase" }
       it { expect { described_class.send(:validate_class,:symbol1,Oval::ClassDeclBase) }.to raise_error Oval::DeclError, msg }

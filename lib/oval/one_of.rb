@@ -23,6 +23,16 @@ class Oval::OneOf < Oval::Base
     end
   end
 
+  def it_should
+    if decls.empty?
+      "be absent"
+    else
+      output = decls[0..-2].map{|k| self.class.it_should(k)}.join(', ')
+      output.empty? ? self.class.it_should(decls[0]) : 
+                      [output, self.class.it_should(decls[-1])].join(' or ')
+    end
+  end
+
   def initialize(*decls)
     self.decls = decls
   end
