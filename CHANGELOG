@@ -1,4 +1,5 @@
 2014-02-03 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * added specs for Oval::Base.it_should
   * release 0.0.5
   * refactored ensure_match -> validate
   * added Oval::Match declarator

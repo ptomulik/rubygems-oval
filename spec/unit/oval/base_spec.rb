@@ -15,7 +15,7 @@ describe Oval::Base do
   end
 
   context "an instance" do
-    let(:subject) { described_class[:shape0] }
+    let(:subject) { described_class[:decl0] }
     [
       :validate,
     ].each do |method|
@@ -36,18 +36,18 @@ describe Oval::Base do
         expect { described_class.validate(:foo,:bar,'subj1') }.to_not raise_error
       end
     end
-    context "validate(:foo,shape)" do
-      let(:shape) { described_class[:shape0] }
-      it "should invoke shape.validate(:foo,nil) once" do
-        shape.expects(:validate).once.with(:foo,nil)
-        expect { described_class.validate(:foo,shape) }.to_not raise_error
+    context "validate(:foo,decl)" do
+      let(:decl) { described_class[:decl0] }
+      it "should invoke decl.validate(:foo,nil) once" do
+        decl.expects(:validate).once.with(:foo,nil)
+        expect { described_class.validate(:foo,decl) }.to_not raise_error
       end
     end
-    context "validate(:foo,shape,'subj1')" do
-      let(:shape) { described_class[:shape0] }
-      it "should invoke shape.validate(:foo,'subj1') once" do
-        shape.expects(:validate).once.with(:foo,'subj1')
-        expect { described_class.validate(:foo,shape,'subj1') }.to_not raise_error
+    context "validate(:foo,decl,'subj1')" do
+      let(:decl) { described_class[:decl0] }
+      it "should invoke decl.validate(:foo,'subj1') once" do
+        decl.expects(:validate).once.with(:foo,'subj1')
+        expect { described_class.validate(:foo,decl,'subj1') }.to_not raise_error
       end
     end
   end
@@ -65,7 +65,7 @@ describe Oval::Base do
   end
 
   describe "#validate" do
-    let(:subject) { described_class[:shape0] }
+    let(:subject) { described_class[:decl0] }
     let(:msg) { "This method should be overwritten by a subclass" }
     [ [], [:arg1,:arg2,:arg3] ].each do |args|
       context "validate(#{args.map{|x| x.inspect}.join(', ')})" do
@@ -82,52 +82,20 @@ describe Oval::Base do
     end
   end
 
-##  describe "#validate_shape" do
-##    let(:subject) { described_class[:shape0] }
-##    let(:msg) { "This method should be overwritten by a subclass" }
-##    [ [:arg1,:arg2] ].each do |args|
-##      context "validate_shape(#{args.map{|x| x.inspect}.join(', ')})" do
-##        let(:args) { args }
-##        it { expect { subject.validate_shape(*args) }.to raise_error ArgumentError }
-##      end
-##    end
-##    context "validate_shape()" do
-##      it { expect { subject.validate_shape() }.to raise_error NotImplementedError, msg}
-##    end
-##    context "validate_shape(:subj1)" do
-##      it { expect { subject.validate_shape(:subj1) }.to raise_error NotImplementedError, msg}
-##    end
-##  end
-
-
-##  describe "shape" do
-####    before { described_class.stubs(:validate_shape) }
-##    context "new(:shape0).shape" do
-##      it { described_class.new(:shape0).shape.should be :shape0 }
-##    end
-##    context "when @shape == :shape1" do
-##      let(:subject) { described_class.new(:shape0) }
-##      before { subject.instance_variable_set(:@shape,:shape1) }
-##      it { subject.shape.should be :shape1 }
-##    end
-##  end
-##
-##  describe "#shape=" do
-####    before { described_class.stubs(:validate_shape) }
-##    let(:subject) { described_class.new(:shape0) }
-##    context "#shape = :shape1" do
-####      it "should call self.class.validate_shape(:shape1) once" do
-####        subject # reference before re-stubbing validate_shape
-####        described_class.stubs(:validate_shape).never
-####        described_class.stubs(:validate_shape).once.with(:shape1,'Base')
-####        expect { subject.send(:shape=,:shape1) }.to_not raise_error
-####      end
-##      it "should assign @shape = :shape1" do
-##        subject.send(:shape=, :shape1)
-##        subject.instance_variable_get(:@shape).should be :shape1
-##      end
-##    end
-##  end
+  describe "#it_should" do
+    let(:subject) { described_class[:decl0] }
+    let(:msg) { "This method should be overwritten by a subclass" }
+    [ [:arg1], [:arg1,:arg2] ].each do |args|
+      context "it_should(#{args.map{|x| x.inspect}.join(', ')})" do
+        let(:args) { args }
+        before { described_class.expects(:it_should).never }
+        it { expect { subject.it_should(*args) }.to raise_error ArgumentError }
+      end
+    end
+    context "it_should" do
+      it { expect { subject.it_should }.to raise_error NotImplementedError, msg}
+    end
+  end
 
   describe "for_subject" do
     [
@@ -144,8 +112,7 @@ describe Oval::Base do
   end
 
   describe "#for_subject" do
-##    before { described_class.stubs(:validate_shape) }
-    let(:subject) { described_class.new(:shape0) }
+    let(:subject) { described_class.new(:decl0) }
     context "for_subject(:subj1)" do
       it "should == self.class.for_subject(subject)" do
         described_class.expects(:for_subject).once.with(:subj1).returns :ok
@@ -170,8 +137,7 @@ describe Oval::Base do
   end
 
   describe "#enumerate" do
-##    before { described_class.stubs(:validate_shape) }
-    let(:subject) { described_class.new(:shape0) }
+    let(:subject) { described_class.new(:decl0) }
     context "enumerate([],'and')" do
       it "should == self.class.enumerate(subject)" do
         described_class.expects(:enumerate).once.with([],'and').returns :ok
