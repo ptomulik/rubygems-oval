@@ -18,17 +18,18 @@
 
 ##<a id="overview"></a>Overview
 
-Validate option hashes when passed to methods.
+Validate arguments and option hashes when passed to methods.
 
 [[Table of Contents](#table-of-contents)]
 
 ##<a id="module-description"></a>Module Description
 
-Using hashes to pass options to methods is a very common ruby practice. With
-**Oval** method authors may restrict callers to pass only declared options that
-meet requirements described in a hash declaration.
+This module implements simple to use data validators. It was initially thought
+to validate option hashes (so the name *Oval* stands for Options' Validator),
+but it appeared early that it's suitable to validate arbitrary parameters
+(variables).
 
-The shape of acceptable hashes is described by a simple grammar. The validation
+The shape of acceptable data is described by a simple grammar. The validation
 is then carried out by a recursive-descent parser that matches the actual
 values provided by caller against [declarators](#declarators) that comprise the
 hash declaration.
@@ -51,15 +52,15 @@ a method which takes the options as an argument.
 ##<a id="usage"></a>Usage
 
 The usage is basically a two-step procedure. The first step is to declare
-options shape. This would create a validator object. The second step is to
-validate options within a method using the previously constructed validator.
-For simple hashes the entire construction may fit to a single line. Let's start
-with such a simple example.
+data to be validated. This would create a validator object. The second step is
+to validate data using the previously constructed validator. For simple cases
+the entire construction may fit to a single line. Let's start with such a
+simple example.
 
 ###<a id="example-1-declaring-simple-options"></a>Example 1: Declaring Simple Options
 
 The method `foo` in the following code accepts only `{}` and `{:foo => value}`
-as `ops`, where `value` is arbitrary:
+as `ops` hash, and the `value` may be anything:
 
 ```ruby
 # Options validator
@@ -67,7 +68,7 @@ require 'oval'
 class C
   extend Oval
   def self.foo(ops = {})
-    ov_options[ :foo => ov_anything ].validate(ops, 'ops')
+    Oval.validate(ops, ov_options[ :foo => ov_anything ], 'ops')
   end
 end
 ```
@@ -80,12 +81,13 @@ C.foo :foo => 10 # should pass
 C.foo :foo => 10, :bar => 20 # Oval::ValueError "Invalid option :bar for ops. Allowed options are :foo"
 ```
 
-Options are declared with [ov_xxx declarators](#declarators). The
-[ov_options](#ov_options) method should always be at the top level. Then all
-the allowed options should be listed inside of `[]` square brackets. Keys may
-be any values convertible to strings (i.e. a key given in declaration must
-`respond_to? :to_s`). Values are declared recursively using [ov_xxx
-declarators](#declarators) or terminal declarators (any other ruby values).
+Options are declared with [ov\_xxx declarators](#declarators). The
+[ov\_options](#ov_options), for example, declares a hash of options. In
+[ov\_options](#ov_options) all the allowed options should be listed inside of
+`[]` square brackets. Keys may be any values convertible to strings (i.e. a key
+given in declaration must `respond_to? :to_s`). Values are declared recursively
+using [ov_xxx declarators](#declarators) or terminal declarators (any other
+ruby values).
 
 In [Example 1](#example-1-declaring-simple-options) we have declared options
 inside of a method for simplicity. This isn't an optimal technique. Usually
@@ -112,7 +114,7 @@ class C
   end
   # use ov to validate ops
   def self.foo(ops = {})
-    ov.validate(ops, 'ops')
+    Oval.validate(ops, ov, 'ops')
   end
 end
 ```
@@ -123,36 +125,19 @@ end
 
 ###<a id="declarators"></a>Declarators
 
-A declaration of options consists entirely of what we call here
-**declarators**. The [ov_options](#ov_options) should be used as a root of
-every declaration (starting symbol in grammar terms). It accepts a Hash of the
-form 
+A declaration of data being validated consists entirely of what we call
+**declarators**. The grammar for defining acceptable data uses non-terminal and
+terminal declarators. Non-terminal declarators are most of the
+[ov\_xxx](#declarators) methods of **Oval** module, for example
+[ov\_options](#ov_options). General syntax for non-terminal declarator is
+`ov_xxx[ args ]`, where `args` are declarator-specific arguments. 
 
-```
-{optname1 => optdecl1, optname2 => optdecl2, ... }
-```
+Terminal declarators include all the other ruby values, for example `nil`. They
+are matched exactly against data being validated, so if the data doesn't equal
+the given value an exception is raised.
 
-as an argument. The **optname#** is an option name, and **optdecl#** is a
-declarator restricting the option's value. Each option name (key) must be
-convertible to a `String`. Option value declarators are non-terminal
-declarators (defined later in this section) or terminals (any other ruby
-values). The simple declaration
-
-```ruby
-ov_options[ :foo => :bar ]
-```
-
-uses only terminals inside of **ov_options** and literary permits only the
-`{:foo => :bar}` or the empty hash `{}` as options (and nothing else). This is
-how terminal declarators (`:foo` and `:bar` in this example) work. More freedom
-may be introduced with non-terminal declarators, for example:
-
-```ruby
-ov_options[ :foo => ov_anything ]
-```
-
-defines an option `:foo` which accepts any value. In what follows, we'll
-document all the core non-terminal declarators implemented in **Oval**.
+In what follows, we'll document all the core declarators implemented in
+**Oval**.
 
 ###<a id="index-of-declarators"></a>Index of Declarators
 
@@ -185,7 +170,7 @@ document all the core non-terminal declarators implemented in **Oval**.
   ```ruby
   ov = ov_options[ :bar => ov_anything ]
   def foo(ops = {})
-    ov.validate(ops, 'ops')
+    Oval.validate(ops, ov, 'ops')
   end
   ```
 
@@ -219,7 +204,7 @@ document all the core non-terminal declarators implemented in **Oval**.
     :geez => ov_collection [ Array, instance_of[String] ]
   ]
   def foo(ops = {})
-    ov.validate(ops, 'ops')
+    Oval.validate(ops, ov, 'ops')
   end
   ```
 
@@ -240,7 +225,7 @@ document all the core non-terminal declarators implemented in **Oval**.
   ```ruby
   ov = ov_options[ :bar => ov_instance_of[String] ]
   def foo(ops = {})
-    ov.validate(ops,'ops')
+    Oval.validate(ops, ov, 'ops')
   end
   ```
 
@@ -261,7 +246,7 @@ document all the core non-terminal declarators implemented in **Oval**.
   ```ruby
   ov = ov_options[ :bar => ov_kind_of[Numeric] ]
   def foo(ops = {})
-    ov.validate(ops,'ops')
+    Oval.validate(ops, ov, 'ops')
   end
   ```
   
@@ -283,7 +268,7 @@ document all the core non-terminal declarators implemented in **Oval**.
   # Only valid identifiers are allowed as :bar option
   ov = ov_options[ :bar => ov_match[/^[a-z_]\w+$/] ]
   def foo(ops = {})
-    ov.validate(ops,'ops')
+    Oval.validate(ops, ov, 'ops')
   end
   ```
   
@@ -305,7 +290,7 @@ document all the core non-terminal declarators implemented in **Oval**.
     :bar => ov_one_of[ ov_instance_of[String], ov_kind_of[Numeric], nil ]
   ]
   def foo(ops = {})
-    ov.validate(ops,'ops')
+    Oval.validate(ops, ov, 'ops')
   end
   ```
   
@@ -331,7 +316,7 @@ document all the core non-terminal declarators implemented in **Oval**.
     # ...
   ]
   def foo(ops = {})
-    ov.validate(ops,'ops')
+    Oval.validate(ops, ov, 'ops')
   end 
   ```
   
@@ -352,7 +337,7 @@ document all the core non-terminal declarators implemented in **Oval**.
   ```ruby
   ov = ov_options[ :bar => ov_subclass_of[Numeric] ]
   def foo(ops = {})
-    ov.validate(ops,'ops')
+    Oval.validate(ops, ov, 'ops')
   end
   ```
   

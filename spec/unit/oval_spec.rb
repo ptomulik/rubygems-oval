@@ -47,7 +47,7 @@ describe Oval do
       Class.new do
         extend Oval
         def self.foo(ops = {})
-          ov_options[ :foo => ov_anything ].validate(ops, 'ops')
+          Oval.validate(ops, ov_options[ :foo => ov_anything ], 'ops')
         end
       end
     end
@@ -73,7 +73,7 @@ describe Oval do
         end
         # use ov to validate ops
         def self.foo(ops = {})
-          ov.validate(ops, 'ops')
+          Oval.validate(ops, ov, 'ops')
         end
       end
     end
