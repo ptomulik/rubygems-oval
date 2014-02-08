@@ -41,11 +41,10 @@ with `ov_` prefix. All other values (such as `:symbol`, `'string'`, `nil`, or
 provided by caller. Non-terminal use its own logic introducing more elaborate
 matching criteria (see for example [ov\_collection](#ov_collection)).
 
-**Oval** raises **Oval::DeclError** if the declaration is not well-formed, that
-is if the description of options shape is erroneous. This is raised from the
-point of declaration. Other, more common exception is the **Oval::ValueError**
-which is raised each time the validation fails. This one is raised from within
-a method which takes the options as an argument.
+**Oval** raises **Oval::DeclError** if the declaration is not well-formed. This
+is raised from the point of declaration. Other, more common exception is the
+**Oval::ValueError** which is raised each time the validation fails. This one
+is raised from within a method which validates its arguments.
 
 [[Table of Contents](#table-of-contents)]
 
