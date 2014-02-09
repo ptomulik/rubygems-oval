@@ -1,4 +1,5 @@
 2014-02-09 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * added test case for 100% coverage
   * release 0.0.7
   * fixed match_spec.rb to work on 1.8 and 2.0
   * revised examples in README.md and added specs to cover them

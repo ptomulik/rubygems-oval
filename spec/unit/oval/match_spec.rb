@@ -92,6 +92,13 @@ describe Oval::Match do
         it { expect { described_class[re].validate(*args) }.to raise_error Oval::ValueError, msg }
       end
     end
+    context "#{described_class.name}[/foo/].validate(im_raising_type_error)" do
+      let(:re)  { /foo/ }
+      let(:msg) { 'error message' }
+      let(:im_raising_type_error) { stub('im_raising_type_error') }
+      before { re.stubs(:match).with(im_raising_type_error).raises TypeError, msg }
+      it { expect { described_class[re].validate(im_raising_type_error) }.to raise_error TypeError, msg }
+    end
   end
 
   describe "#it_should" do
