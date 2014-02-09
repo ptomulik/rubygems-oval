@@ -167,10 +167,21 @@ In what follows, we'll document all the core declarators implemented in
 - Example
 
   ```ruby
-  ov = ov_options[ :bar => ov_anything ]
-  def foo(ops = {})
-    Oval.validate(ops, ov, 'ops')
+  require 'oval'
+  class C
+    extend Oval
+    def self.ov
+      @oc = ov_options[ :bar => ov_anything ]
+    end
+    def self.foo(ops = {})
+      Oval.validate(ops, ov, 'ops')
+    end
   end
+  C.foo() # should pass
+  C.foo :bar => 10 # should pass
+  C.foo :bar => nil # should pass
+  C.foo :bar => 'bar' # should pass
+  C.foo :foo => 10, :bar => 20 # Oval::ValueError "Invalid option :foo for ops. Allowed options are :bar"
   ```
 
 [[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
@@ -198,13 +209,26 @@ In what follows, we'll document all the core declarators implemented in
 - Example
 
   ```ruby
-  ov = ov_options[
-    :bar => ov_collection[ Hash, { instance_of[Symbol] => anything } ],
-    :geez => ov_collection [ Array, instance_of[String] ]
-  ]
-  def foo(ops = {})
-    Oval.validate(ops, ov, 'ops')
+  require 'oval'
+  class C
+    extend Oval
+    def self.ov_h
+      ov_collection[ Hash, { ov_instance_of[Symbol] => ov_anything } ]
+    end
+    def self.ov_a
+      ov_collection[ Array, ov_instance_of[String] ]
+    end
+    def self.foo(h, a)
+      Oval.validate(h, ov_h, 'h')
+      Oval.validate(a, ov_a, 'a')
+    end
   end
+  C.foo({:x => 10}, ['xxx']) # Should bass
+  C.foo({:x => 10, :y => nil}, ['xxx', 'zzz']) # Should pass
+  C.foo(10,['xxx']) # Oval::ValueError, "Invalid value Fixnum for h.class. Should be equal Hash"
+  C.foo({:x => 10, 'y' => 20}, [ 'xxx' ]) # Oval::ValueError, 'Invalid object "y" of type String for h key. Should be an instance of Symbol'
+  C.foo({:x => 10}, 20) # Invalid value Fixnum for a.class. Should be equal Array
+  C.coo({:x => 10}, [ 'ten', 20 ]) # Oval::ValueError, "Invalid object 20 of type Fixnum for a[1]. Should be an instance of String"
   ```
 
 [[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
@@ -222,10 +246,18 @@ In what follows, we'll document all the core declarators implemented in
 - Example
 
   ```ruby
-  ov = ov_options[ :bar => ov_instance_of[String] ]
-  def foo(ops = {})
-    Oval.validate(ops, ov, 'ops')
+  require 'oval'
+  class C
+    extend Oval
+    def self.ov
+      ov_instance_of[String]
+    end
+    def self.foo(s)
+      Oval.validate(s, ov, 's')
+    end
   end
+  C.foo('bar') # Should pass
+  C.foo(10) # Oval::ValueError, "Invalid object 10 for s. Should be an instance of String"
   ```
 
 [[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
@@ -243,10 +275,19 @@ In what follows, we'll document all the core declarators implemented in
 - Example
 
   ```ruby
-  ov = ov_options[ :bar => ov_kind_of[Numeric] ]
-  def foo(ops = {})
-    Oval.validate(ops, ov, 'ops')
+  require 'oval'
+  class C
+    extend Oval
+    def self.ov
+      ov_kind_of[Numeric]
+    end
+    def self.foo(n)
+      Oval.validate(n, ov, 'n')
+    end
   end
+  C.foo(10) # Should pass
+  C.foo(10.0) # Should pass
+  C.foo('10') # Oval::ValueError, 'Invalid object "10" of type String for n. Should be a kind of Numeric'
   ```
   
 [[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
@@ -264,11 +305,20 @@ In what follows, we'll document all the core declarators implemented in
 - Example
 
   ```ruby
-  # Only valid identifiers are allowed as :bar option
-  ov = ov_options[ :bar => ov_match[/^[a-z_]\w+$/] ]
-  def foo(ops = {})
-    Oval.validate(ops, ov, 'ops')
+  require 'oval'
+  class C
+    extend Oval
+    def self.ov
+      # Only valid identifiers are allowed as :bar option
+      ov_match[/^[a-z_]\w+$/]
+    end
+    def self.foo(name)
+      Oval.validate(name, ov, 'name')
+    end
   end
+  C.foo('var_23') # Should pass
+  C.foo(10) # Oval::ValueError, "Invalid value 10 for name. Should match /^[a-z_]\\w+$/ but it's not even convertible to String"
+  C.foo('10abc_') # Oval::ValueError, 'Invalid value "10abc_" for name. Should match /^[a-z_]\\w+$/'
   ```
   
 [[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
@@ -285,12 +335,21 @@ In what follows, we'll document all the core declarators implemented in
 - Example
 
   ```ruby
-  ov = ov_options[ 
-    :bar => ov_one_of[ ov_instance_of[String], ov_kind_of[Numeric], nil ]
-  ]
-  def foo(ops = {})
-    Oval.validate(ops, ov, 'ops')
+  require 'oval'
+  class C
+    extend Oval
+    def self.ov
+      ov_one_of[ ov_instance_of[String], ov_kind_of[Numeric], nil ]
+    end
+    def self.foo(x)
+      Oval.validate(x, ov, 'x')
+    end
   end
+  C.foo('str')  # Should pass
+  C.foo(10)     # Should pass
+  C.foo(10.0)   # Should pass
+  C.foo(nil)    # Should pass
+  C.foo([])     # Oval::ValueError, "Invalid value [] for x. Should be an instance of String, be a kind of Numeric or be equal nil"
   ```
   
 [[Table of Contents](#table-of-contents)|[Index of Declarators](#index-of-declarators)]
@@ -334,10 +393,21 @@ In what follows, we'll document all the core declarators implemented in
 - Example
 
   ```ruby
-  ov = ov_options[ :bar => ov_subclass_of[Numeric] ]
-  def foo(ops = {})
-    Oval.validate(ops, ov, 'ops')
+  require 'oval'
+  class C
+    extend Oval
+    def self.ov
+      ov_options[ :bar => ov_subclass_of[Numeric] ]
+    end
+    def self.foo(ops = {})
+      Oval.validate(ops, ov, 'ops')
+    end
   end
+  C.foo :bar => Integer   # Should pass
+  C.foo :bar => Fixnum    # Should pass
+  C.foo([])               # Oval::ValueError, "Invalid options [] of type Array. Should be a Hash
+  C.foo :foo => Fixnum    # Oval::ValueError, "Invalid option :foo for ops. Allowed options are :bar"
+  C.foo :bar => 10        # Oval::ValueError, "Invalid class 10 for ops[:bar]. Should be subclass of Numeric"
   ```
   
 ###<a id="api-reference"></a>API Reference

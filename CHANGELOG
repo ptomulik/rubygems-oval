@@ -1,4 +1,5 @@
 2014-02-09 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * revised examples in README.md and added specs to cover them
   * fixed Oval::Match#validate to handle non-string TypeError
 2014-02-08 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
   * release 0.0.6
