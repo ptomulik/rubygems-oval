@@ -3,10 +3,16 @@ require 'oval/base'
 class Oval::Match < Oval::Base
 
   def validate(thing, subject = nil)
-    unless re.match(thing)
-      raise Oval::ValueError,
-        "Invalid value #{thing.inspect}#{for_subject(subject)}. " +
-        "Should #{it_should}"
+    begin
+      unless re.match(thing)
+        raise Oval::ValueError,
+          "Invalid value #{thing.inspect}#{for_subject(subject)}. " +
+          "Should #{it_should}"
+      end
+    rescue TypeError, /can't convert \S+ to String/ => err
+        raise Oval::ValueError,
+          "Invalid value #{thing.inspect}#{for_subject(subject)}. " +
+          "Should #{it_should} but it's not even convertible to String"
     end
   end
 
