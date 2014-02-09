@@ -82,7 +82,8 @@ describe Oval::Match do
     [
       [ /^[a-z_][a-z0-9_]+/, ['5643'], "Invalid value \"5643\". Should match #{(/^[a-z_][a-z0-9_]+/).inspect}" ],
       [ /^[a-z_][a-z0-9_]+/, ['5643','subj'], "Invalid value \"5643\" for subj. Should match #{(/^[a-z_][a-z0-9_]+/).inspect}" ],
-      [ /^[a-z_][a-z0-9_]+/, [nil,'subj'], "Invalid value nil for subj. Should match #{(/^[a-z_][a-z0-9_]+/).inspect}" ]
+      [ /^[a-z_][a-z0-9_]+/, [nil,'subj'], "Invalid value nil for subj. Should match #{(/^[a-z_][a-z0-9_]+/).inspect}" ],
+      [ /^[a-z_][a-z0-9_]+/, [10,'subj'], "Invalid value 10 for subj. Should match #{(/^[a-z_][a-z0-9_]+/).inspect} but it's not even convertible to String" ]
     ].each do |re,args,msg|
       context "#{described_class.name}[#{re.inspect}].validate(#{args.map{|x| x.inspect}.join(', ')})" do
         let(:re) { re }

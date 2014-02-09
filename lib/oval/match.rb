@@ -9,10 +9,15 @@ class Oval::Match < Oval::Base
           "Invalid value #{thing.inspect}#{for_subject(subject)}. " +
           "Should #{it_should}"
       end
-    rescue TypeError, /can't convert \S+ to String/ => err
+    rescue TypeError => err
+      ere = /(?:can't convert|no implicit conversion of) \S+ (?:in)?to String/
+      if ere.match(err.message)
         raise Oval::ValueError,
           "Invalid value #{thing.inspect}#{for_subject(subject)}. " +
           "Should #{it_should} but it's not even convertible to String"
+      else
+        raise
+      end
     end
   end
 
