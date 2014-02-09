@@ -30,16 +30,16 @@ but it appeared early that it's suitable to validate arbitrary parameters
 (variables).
 
 The shape of acceptable data is described by a simple grammar. The validation
-is then carried out by a recursive-descent parser that matches the actual
-values provided by caller against [declarators](#declarators) that comprise the
-hash declaration.
+is then carried out by a recursive-descent parser which matches actual values
+provided by caller to [declarators](#declarators) that comprise the declaration
+of acceptable values.
 
-A declaration consists of terminal and non-terminal declarators. Non-terminal
-declarators are created by methods of `Oval` module which have names starting
-with `ov_` prefix. All other values (such as `:symbol`, `'string'`, `nil`, or
-`Class`) are terminals. Terminals use `==` operator to match the values
-provided by caller. Non-terminal use its own logic introducing more elaborate
-matching criteria (see for example [ov\_collection](#ov_collection)).
+A declaration consists of terminal and non-terminal declarators. Most *Oval*
+methods with **ov_xxx** names are non-terminal declarators. All other values
+(such as `:symbol`, `'string'`, `nil`, or `Class`) are terminals. Terminals use
+`==` operator to match the values provided by caller. Non-terminal use its own
+logic introducing more elaborate matching criteria (see for example
+[ov\_collection](#ov_collection)).
 
 **Oval** raises **Oval::DeclError** if the declaration is not well-formed. This
 is raised from the point of declaration. Other, more common exception is the
